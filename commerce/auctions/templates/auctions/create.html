@@ -1,0 +1,57 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}Create Listing{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">Create Listing</h2>
+
+    <div class="create-listing p-4 border rounded bg-light">
+        <form action="{% url 'create' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group mb-3">
+                <label for="{{ form.title.id_for_label }}">Title:</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="text-danger">{{ form.title.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="{{ form.description.id_for_label }}">Description:</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger">{{ form.description.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="{{ form.starting_bid.id_for_label }}">Starting Bid:</label>
+                {{ form.starting_bid }}
+                {% if form.starting_bid.errors %}
+                    <div class="text-danger">{{ form.starting_bid.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="{{ form.image_url.id_for_label }}">Image URL:</label>
+                {{ form.image_url }}
+                {% if form.image_url.errors %}
+                    <div class="text-danger">{{ form.image_url.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="{{ form.category.id_for_label }}">Category:</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="text-danger">{{ form.category.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

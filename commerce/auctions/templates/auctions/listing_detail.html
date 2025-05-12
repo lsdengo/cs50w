@@ -1,0 +1,64 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}{{ listing.title }}{% endblock %}
+
+{% block body %}
+    <h2>{{ listing.title }}</h2>
+    <img src="{{ listing.image_url }}" alt="{{ listing.title }}" class="img-fluid mb-3" style="max-width: 400px;">
+    <p>{{ listing.description }}</p>
+    <p><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
+    <p><strong>Current Bid:</strong> ${{ current_bid }}</p>
+    
+    {% if is_owner %}
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" name="close_auction" class="btn btn-danger">Close Auction</button>
+        </form>
+    {% endif %}
+    
+    {% if is_winner %}
+        <div class="alert alert-success mt-3">
+            You won this auction! Congratulations!
+        </div>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+        <form method="POST" class="mt-3">
+            {% csrf_token %}
+            {% if is_watchlisted %}
+                <button type="submit" name="add_watchlist" class="btn btn-warning">Remove from Watchlist</button>
+            {% else %}
+                <button type="submit" name="add_watchlist" class="btn btn-success">Add to Watchlist</button>
+            {% endif %}
+        </form>
+        
+        <form method="POST" class="mt-3">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="bid_amount">Place a Bid:</label>
+                <input type="number" class="form-control" name="bid_amount" id="bid_amount" placeholder="Enter your bid" min="{{ current_bid }}">
+            </div>
+            <button type="submit" name="place_bid" class="btn btn-primary">Place Bid</button>
+        </form>
+    {% endif %}
+    
+    <h3>Comments</h3>
+    {% for comment in comments %}
+        <div class="card mt-3">
+            <div class="card-body">
+                <p><strong>{{ comment.commenter.username }}</strong>: {{ comment.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    
+    {% if user.is_authenticated %}
+        <form method="POST" class="mt-3">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="comment_content">Add a Comment:</label>
+                <textarea class="form-control" name="comment_content" id="comment_content" rows="3"></textarea>
+            </div>
+            <button type="submit" name="comment" class="btn btn-secondary">Add Comment</button>
+        </form>
+    {% endif %}
+{% endblock %}
